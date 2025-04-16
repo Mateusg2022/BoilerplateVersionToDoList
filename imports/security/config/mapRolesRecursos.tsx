@@ -1,12 +1,14 @@
 import { Recurso as Exemplo } from '/imports/modules/example/config/recursos';
 import { Recurso as Aniversario } from '/imports/modules/aniversario/config/recursos';
 import { Recurso as Usuarios } from '/imports/modules/userprofile/config/recurso';
+import { Recurso as ToDos } from '/imports/modules/toDos/config/recursos';
+
 import { RoleType } from '/imports/security/config/roleType';
 import { HomeResources, SysFormTestPageResources } from '/imports/sysPages/config/resources';
 
-const _getAllValues = (obj: any) => Object.keys(obj).map(key => obj[key]);
+const _getAllValues = (obj: any) => Object.keys(obj).map((key) => obj[key]);
 
-type MapRolesRecursos = Record<RoleType, Array<string>>; 
+type MapRolesRecursos = Record<RoleType, Array<string>>;
 
 const _mapRolesRecursos: MapRolesRecursos = {
 	[RoleType.PUBLICO]: [],
@@ -15,13 +17,11 @@ const _mapRolesRecursos: MapRolesRecursos = {
 		..._getAllValues(HomeResources),
 		..._getAllValues(SysFormTestPageResources),
 		..._getAllValues(Aniversario),
+		..._getAllValues(ToDos),
 		Usuarios.USUARIO_UPDATE,
-		Usuarios.USUARIO_VIEW,	
+		Usuarios.USUARIO_VIEW
 	],
-	[RoleType.ADMINISTRADOR]: [
-		Usuarios.USUARIO_CREATE,
-		Usuarios.USUARIO_REMOVE,
-	],
+	[RoleType.ADMINISTRADOR]: [Usuarios.USUARIO_CREATE, Usuarios.USUARIO_REMOVE]
 };
 
 /**
@@ -33,16 +33,11 @@ const _mapRolesRecursos: MapRolesRecursos = {
  * O nome do recurso deve ser prefixado com nome do módulo.
  */
 export const mapRolesRecursos: MapRolesRecursos = {
-	[RoleType.PUBLICO]: [
-		..._mapRolesRecursos[RoleType.PUBLICO],
-	],
-	[RoleType.USUARIO]: [
-		..._mapRolesRecursos[RoleType.PUBLICO],
-		..._mapRolesRecursos[RoleType.USUARIO],
-	],
+	[RoleType.PUBLICO]: [..._mapRolesRecursos[RoleType.PUBLICO]],
+	[RoleType.USUARIO]: [..._mapRolesRecursos[RoleType.PUBLICO], ..._mapRolesRecursos[RoleType.USUARIO]],
 	[RoleType.ADMINISTRADOR]: [
 		..._mapRolesRecursos[RoleType.PUBLICO],
 		..._mapRolesRecursos[RoleType.USUARIO],
-		..._mapRolesRecursos[RoleType.ADMINISTRADOR],
-	],
+		..._mapRolesRecursos[RoleType.ADMINISTRADOR]
+	]
 };

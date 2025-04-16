@@ -52,7 +52,7 @@ class PersistentMinimongoStorage {
 					...options,
 					upsert: true
 				});
-				const newDoc = self.cachedCollection.findOne(selector);
+				const newDoc = self.cachedCollection.findOneAsync(selector);
 				set(newDoc._id, stringify(newDoc), self.customStore);
 				if (!updateFromSync) {
 					newDoc.lastupdate = new Date();
