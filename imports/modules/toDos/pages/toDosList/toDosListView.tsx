@@ -108,6 +108,7 @@ const ToDosListView = () => {
 
 							return (
 								<ListItem
+									onClick={() => navigate('/toDos/view/' + task._id)}
 									sx={{ width: '100%' }}
 									key={task._id}
 									secondaryAction={

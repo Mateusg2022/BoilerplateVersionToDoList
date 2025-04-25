@@ -41,6 +41,8 @@ import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+import Button from '@mui/material/Button';
+
 const Home: React.FC = () => {
 	const { Container, Header } = HomeStyles;
 	//const { Container, Header, LoadingContainer, ContainerBody } = HomeStyles;
@@ -134,11 +136,18 @@ const Home: React.FC = () => {
 						);
 					})}
 			</List>
+			<Button variant="contained" onClick={() => navigate('/toDos')}>
+				Lista de tarefas
+			</Button>
+		</Container>
+	);
+};
 
-			{/* <HomeSectionNotificacoes />
+export default Home;
+/* <HomeSectionNotificacoes />
 			<HomeSectionDialogs />
-			<HomeSectionComponents /> */}
-			{/* <Typography variant="h5">Lista de Itens</Typography>
+			<HomeSectionComponents /> */
+/* <Typography variant="h5">Lista de Itens</Typography>
 				<SearchContainer>
 					<SysTextField
 						name="search"
@@ -185,9 +194,4 @@ const Home: React.FC = () => {
 				startIcon={<SysIcon name={'add'} />}
 				fixed={true}
 				onClick={controller.onAddButtonClick}
-			/> */}
-		</Container>
-	);
-};
-
-export default Home;
+			/> */
