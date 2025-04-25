@@ -22,13 +22,7 @@ const ExampleDetailView = () => {
 	const isView = state === 'view';
 	const isEdit = state === 'edit';
 	const isCreate = state === 'create';
-  const {
-    Container,
-    Body,
-    Header,
-    Footer,
-    FormColumn
-  } = ExampleDetailStyles;
+	const { Container, Body, Header, Footer, FormColumn } = ExampleDetailStyles;
 
 	return (
 		<Container>

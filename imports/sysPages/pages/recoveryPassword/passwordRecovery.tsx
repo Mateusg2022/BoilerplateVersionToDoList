@@ -7,7 +7,6 @@ import TextField from '/imports/ui/components/SimpleFormFields/TextField/TextFie
 import Button from '@mui/material/Button';
 import SimpleForm from '/imports/ui/components/SimpleForm/SimpleForm';
 
-
 import { IDefaultContainerProps } from '/imports/typings/BoilerplateDefaultTypings';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -19,19 +18,13 @@ import { sysSizing } from '/imports/ui/materialui/styles';
 import SysIcon from '/imports/ui/components/sysIcon/sysIcon';
 import AppLayoutContext from '/imports/app/appLayoutProvider/appLayoutContext';
 
-
 export const PasswordRecovery = (props: IDefaultContainerProps) => {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [msg, setMsg] = React.useState<boolean>(false);
 
 	const { showNotification } = useContext(AppLayoutContext);
 	const navigate = useNavigate();
-  const {
-    Container,
-    Content,
-    FormContainer,
-    FormWrapper,
-  } = SignInStyles;
+	const { Container, Content, FormContainer, FormWrapper } = SignInStyles;
 
 	const handleSubmit = (doc: { email: string }) => {
 		const { email } = doc;
@@ -137,7 +130,7 @@ export const PasswordRecovery = (props: IDefaultContainerProps) => {
 						variant="contained"
 						color="primary"
 						id="cancelar"
-						startIcon={<SysIcon name={'arrowBack'}/>}
+						startIcon={<SysIcon name={'arrowBack'} />}
 						sx={{ transition: 'all 0.3s ease', display: !msg ? 'none' : 'flex' }}>
 						{loading ? <CircularProgress size={24} /> : 'Voltar para o Login'}
 					</Button>

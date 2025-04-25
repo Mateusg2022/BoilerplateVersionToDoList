@@ -6,7 +6,8 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { ISchema } from '/imports/typings/ISchema';
 import { IToDos } from '../../api/toDosSch';
 import { toDosApi } from '../../api/toDosApi';
-
+import { string } from 'prop-types';
+//here
 interface IInitialConfig {
 	sortProperties: { field: string; sortAscending: boolean };
 	filter: Object;
@@ -39,7 +40,13 @@ const ToDosListController = () => {
 	const [config, setConfig] = React.useState<IInitialConfig>(initialConfig);
 
 	const { title, type, typeMulti } = toDosApi.getSchema();
-	const toDosSchReduzido = { title, type, typeMulti, createdat: { type: Date, label: 'Criado em' } };
+	const toDosSchReduzido = {
+		title,
+		// teste: { type: string, label: 'Teste' },
+		type,
+		typeMulti,
+		createdat: { type: Date, label: 'Criado em' }
+	};
 	const navigate = useNavigate();
 
 	const { sortProperties, filter } = config;

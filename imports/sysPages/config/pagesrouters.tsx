@@ -9,6 +9,8 @@ import SignInPage from '../pages/signIn/signIn';
 import { HomeResources, SysFormTestPageResources } from './resources';
 import SysFormPlayground from '../../sysPages/pages/sysFormPlayground/sysFormPlayground';
 
+import { SignUp as SignUpPage } from '../../sysPages/pages/signUp/signUp';
+
 export const pagesRouterList: (IRoute | null)[] = [
 	{
 		path: '/',
@@ -58,6 +60,12 @@ export const pagesRouterList: (IRoute | null)[] = [
 	{
 		path: '/verify-email/:token',
 		component: EmailVerify,
+		templateVariant: 'None'
+	},
+	{
+		path: '/sign-up',
+		component: SignUpPage,
+		isProtected: false,
 		templateVariant: 'None'
 	}
 ];

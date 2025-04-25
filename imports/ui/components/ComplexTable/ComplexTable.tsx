@@ -202,6 +202,21 @@ interface IComplexTableProps {
 	 *  Objeto contendo um campo como chave e uma largura específica em px para a coluna do campo em questão
 	 */
 	fieldsMaxWidthColumnModified?: { [key: string]: number };
+
+	/**
+	 * array com os tamanhos de pagina personalizável
+	 */
+	pageSizeOptions?: number[];
+
+	/**
+	 * tamanho padrão da paginaçao
+	 */
+	initialPageSize?: number;
+
+	/**
+	 * Callback chamada quando o modelo de paginação muda (página ou tamanho da página).
+	 */
+	onPaginationModelChange?: (model: { page: number; pageSize: number }) => void;
 }
 
 export const locale = {
@@ -237,9 +252,14 @@ export const ComplexTable = (props: IComplexTableProps) => {
 		renderCellModified,
 		fieldsRenderCellModified,
 		disableSorting,
-		disableCheckboxSelection = true,
+		disableCheckboxSelection,
 		fieldsMinWidthColumnModified,
-		fieldsMaxWidthColumnModified
+		fieldsMaxWidthColumnModified,
+		pageSizeOptions,
+		//pageSizeOptions,
+		initialPageSize = 5,
+		//initialPageSize
+		onPaginationModelChange
 	} = props;
 
 	locale.toolbarQuickFilterPlaceholder = searchPlaceholder ?? 'Pesquisar';
@@ -421,12 +441,14 @@ export const ComplexTable = (props: IComplexTableProps) => {
 				rows={data}
 				columns={columns}
 				rowCount={data?.length}
-				paginationMode={'server'}
+				//paginationMode={'server'}
+				paginationMode={'client'}
 				autoHeight={autoHeight ?? true}
 				localeText={locale}
 				getRowId={!!getId ? getId : (row) => row._id}
 				onRowSelectionModelChange={(newSelection) => setSelection(newSelection)}
 				rowSelectionModel={selection}
+				onPaginationModelChange={onPaginationModelChange}
 				onRowClick={
 					!!onRowClick
 						? (params: GridRowParams, event: MuiEvent<React.MouseEvent>) => {
@@ -487,9 +509,12 @@ export const ComplexTable = (props: IComplexTableProps) => {
 				disableColumnFilter
 				disableColumnMenu
 				initialState={{
-					pagination: { paginationModel: { pageSize: 15 } }
+					// pagination: { paginationModel: { pageSize: 15 } }
+					pagination: { paginationModel: { pageSize: initialPageSize } }
 				}}
-				pageSizeOptions={[15, 20, 25]}
+				// pageSizeOptions={[15, 20, 25]}
+				// pageSizeOptions={pageSizeOptions}
+				pageSizeOptions={pageSizeOptions}
 			/>
 		</ComplexTableContainer>
 	);

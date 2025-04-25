@@ -14,6 +14,11 @@ import { SysSelectField } from '/imports/ui/components/sysFormFields/sysSelectFi
 import SysIcon from '/imports/ui/components/sysIcon/sysIcon';
 import AppLayoutContext, { IAppLayoutContext } from '/imports/app/appLayoutProvider/appLayoutContext';
 
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+// import { ToDosModuleContext } from '../../toDosContainer';
+import AuthContext, { IAuthContext } from '/imports/app/authProvider/authContext';
+
 const ToDosListView = () => {
 	const controller = React.useContext(ToDosListControllerContext);
 	// const { Container, LoadingContainer, SearchContainer } = ExampleListStyles;
@@ -22,10 +27,42 @@ const ToDosListView = () => {
 	const navigate = useNavigate();
 	const { Container, LoadingContainer, SearchContainer } = ToDosListStyles;
 
+	const authContext = React.useContext<IAuthContext>(AuthContext);
+
+	// interface IAuthContext {
+	// 		isLoggedIn: boolean;
+	// 		user?: IUserProfile;
+	// 		userLoading: boolean;
+	// 		logout: (callback: () => void) => void;
+	// 		signIn: (email: string, password: string, callback: (err?: IMeteorError) => void) => void;
+	// }
+
+	// export interface IUserProfile extends IDoc {
+	// 	photo?: string;
+	// 	phone?: string;
+	// 	username: string;
+	// 	email: string;
+	// 	roles?: string[];
+	// 	status?: string;
+	// }
+
 	const options = [{ value: '', label: 'Nenhum' }, ...(controller.schema.type.options?.() ?? [])];
 
 	return (
 		<Container>
+			isLoggedIn: {authContext.isLoggedIn ? 'Sim\n' : 'Não\n'}
+			<br></br>
+			userLoading: {authContext.userLoading ? 'Sim\n' : 'Não\n'}
+			<br></br>
+			usuario: {authContext.user?.username + '\n'}
+			<br></br>
+			email: {authContext.user?.email + '\n'}
+			<br></br>
+			roles: {authContext.user?.roles?.join(', ') + '\n'}
+			<br></br>
+			status: {authContext.user?.status + '\n'}
+			<br></br>
+			<Typography variant="h4">ToDos</Typography>
 			<Typography variant="h5">Lista de Itens</Typography>
 			<SearchContainer>
 				<SysTextField
@@ -51,10 +88,14 @@ const ToDosListView = () => {
 				<Box sx={{ width: '100%' }}>
 					<ComplexTable
 						data={controller.todoList}
+						//data={controller.todoList.slice(0, 5)}
 						schema={controller.schema}
 						onRowClick={(row) => navigate('/toDos/view/' + row.id)}
 						searchPlaceholder={'Pesquisar exemplo'}
+						disableCheckboxSelection={false}
 						onEdit={(row) => navigate('/toDos/edit/' + row._id)}
+						pageSizeOptions={[5, 10, 20] as number[]}
+						initialPageSize={5}
 						onDelete={(row) => {
 							DeleteDialog({
 								showDialog: sysLayoutContext.showDialog,
@@ -72,7 +113,6 @@ const ToDosListView = () => {
 					/>
 				</Box>
 			)}
-
 			<SysFab
 				variant="extended"
 				text="Adicionar"

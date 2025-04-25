@@ -20,9 +20,10 @@ const SignInPage: React.FC = () => {
 
 	const handleSubmit = ({ email, password }: { email: string; password: string }) => {
 		signIn(email, password, (err) => {
-			if (!err) {
+			if (!err || err == null) {
 				navigate('/');
 			} else {
+				console.log('Login err', err);
 				showNotification({
 					type: 'error',
 					title: 'Erro ao tentar logar',
@@ -37,6 +38,11 @@ const SignInPage: React.FC = () => {
 	useEffect(() => {
 		if (user) navigate('/');
 	}, [user]);
+
+	// <ScreenRouteRender component={SignUp} templateVariant="None" />;
+	function handleSignUpClick() {
+		return navigate('/sign-up');
+	}
 
 	return (
 		<Container>
@@ -66,6 +72,13 @@ const SignInPage: React.FC = () => {
 							</SysFormButton>
 						</FormWrapper>
 					</SysForm>
+					<Button
+						variant="text"
+						color="primary"
+						onClick={handleSignUpClick} /*endIcon={<SysIcon name={'arrowForward'} />}*/
+					>
+						Criar conta
+					</Button>
 				</FormContainer>
 
 				<Box component="img" src="/images/wireframe/synergia-logo.svg" sx={{ width: '100%', maxWidth: '400px' }} />

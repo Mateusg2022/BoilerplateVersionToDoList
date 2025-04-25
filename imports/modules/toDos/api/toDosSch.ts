@@ -25,18 +25,6 @@ export const toDosSch: ISchema<IToDos> = {
 		defaultValue: '',
 		optional: true
 	},
-
-	check: {
-		type: Array<String>,
-		label: 'Grupos associados',
-		defaultValue: {},
-		optional: true,
-		options: () => [
-			{ value: 'Grupo 1', label: 'Grupo 1' },
-			{ value: 'Grupo 2', label: 'Grupo 2' },
-			{ value: 'Grupo 3', label: 'Grupo 3' }
-		]
-	},
 	// type: {
 	// 	type: String,
 	// 	label: 'Categoria',
@@ -57,6 +45,17 @@ export const toDosSch: ISchema<IToDos> = {
 			{ value: 'Cadastrada', label: 'Cadastrada' },
 			{ value: 'Em andamento', label: 'Em andamento' },
 			{ value: 'Concluída', label: 'Concluída' }
+		]
+	},
+	check: {
+		type: Array<String>,
+		label: 'Grupos associados',
+		defaultValue: {},
+		optional: true,
+		options: () => [
+			{ value: 'Grupo 1', label: 'Grupo 1' },
+			{ value: 'Grupo 2', label: 'Grupo 2' },
+			{ value: 'Grupo 3', label: 'Grupo 3' }
 		]
 	},
 	typeMulti: {

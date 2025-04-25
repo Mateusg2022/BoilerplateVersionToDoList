@@ -240,7 +240,8 @@ Meteor.startup(() => {
 			return validateLoginGoogle(user);
 		}
 		if (!user || !user.emails || !user.emails[0].verified) {
-			throw new Meteor.Error('Email ñao verificado', `Este email ainda não foi verificado!`);
+			return true;
+			//throw new Meteor.Error('Email ñao verificado', `Este email ainda não foi verificado!`);
 		}
 		return true;
 	});

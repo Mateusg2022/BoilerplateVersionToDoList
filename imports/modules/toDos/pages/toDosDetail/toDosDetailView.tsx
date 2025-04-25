@@ -56,7 +56,7 @@ const ToDosDetailView = () => {
 							placeholder="Acrescente informações sobre o item (3 linhas)"
 							multiline
 							rows={3}
-							maxRows={3}
+							// maxRows={3}
 							showNumberCharactersTyped
 							max={200}
 						/>

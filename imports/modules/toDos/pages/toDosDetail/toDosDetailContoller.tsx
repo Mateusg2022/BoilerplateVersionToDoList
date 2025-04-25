@@ -53,7 +53,7 @@ const ToDosDetailController = () => {
 				showNotification({
 					type: 'success',
 					title: 'Operação realizada!',
-					message: `O exemplo foi ${selectedAction === 'update' ? 'atualizado' : 'cadastrado'} com sucesso!`
+					message: `A tarefa foi ${selectedAction === 'update' ? 'atualizada' : 'cadastrada'} com sucesso!`
 				});
 			} else {
 				showNotification({
