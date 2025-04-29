@@ -112,33 +112,7 @@ const ToDosListView = () => {
 									onClick={() => navigate('/toDos/view/' + task._id)}
 									sx={{ width: '100%' }}
 									key={task._id}
-									disablePadding
-									// secondaryAction={
-									// 	<>
-									// 		<IconButton>
-									// 			<EditIcon />
-									// 		</IconButton>
-									// 		<IconButton>
-									// 			<DeleteIcon
-									// 				onClick={() => {
-									// 					DeleteDialog({
-									// 						showDialog: sysLayoutContext.showDialog,
-									// 						closeDialog: sysLayoutContext.closeDialog,
-									// 						title: `Excluir dado ${task.title}`,
-									// 						message: `Tem certeza que deseja excluir o arquivo ${task.title}?`,
-									// 						onDeleteConfirm: () => {
-									// 							controller.onDeleteButtonClick(task);
-									// 							sysLayoutContext.showNotification({
-									// 								message: 'Excluído com sucesso!'
-									// 							});
-									// 						}
-									// 					});
-									// 				}}
-									// 			/>
-									// 		</IconButton>
-									// 	</>
-									// }
-								>
+									disablePadding>
 									<ListItemButton role={undefined} onClick={handleToggle(String(task._id))} dense>
 										<ListItemIcon>
 											<Checkbox

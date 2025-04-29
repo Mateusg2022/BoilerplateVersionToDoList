@@ -17,7 +17,7 @@ interface IInitialConfig {
 
 interface IToDosListContollerContext {
 	onAddButtonClick: () => void;
-	onDeleteButtonClick: (row: string) => void;
+	onDeleteButtonClick: (row: any) => void;
 	changeToEdit: (id: any) => void;
 	todoList: IToDos[];
 	schema: ISchema<any>;
