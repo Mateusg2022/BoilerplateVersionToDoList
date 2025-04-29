@@ -25,6 +25,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
@@ -111,32 +112,33 @@ const ToDosListView = () => {
 									onClick={() => navigate('/toDos/view/' + task._id)}
 									sx={{ width: '100%' }}
 									key={task._id}
-									secondaryAction={
-										<>
-											<IconButton>
-												<EditIcon />
-											</IconButton>
-											<IconButton>
-												<DeleteIcon
-													onClick={() => {
-														DeleteDialog({
-															showDialog: sysLayoutContext.showDialog,
-															closeDialog: sysLayoutContext.closeDialog,
-															title: `Excluir dado ${task.title}`,
-															message: `Tem certeza que deseja excluir o arquivo ${task.title}?`,
-															onDeleteConfirm: () => {
-																controller.onDeleteButtonClick(task);
-																sysLayoutContext.showNotification({
-																	message: 'Excluído com sucesso!'
-																});
-															}
-														});
-													}}
-												/>
-											</IconButton>
-										</>
-									}
-									disablePadding>
+									disablePadding
+									// secondaryAction={
+									// 	<>
+									// 		<IconButton>
+									// 			<EditIcon />
+									// 		</IconButton>
+									// 		<IconButton>
+									// 			<DeleteIcon
+									// 				onClick={() => {
+									// 					DeleteDialog({
+									// 						showDialog: sysLayoutContext.showDialog,
+									// 						closeDialog: sysLayoutContext.closeDialog,
+									// 						title: `Excluir dado ${task.title}`,
+									// 						message: `Tem certeza que deseja excluir o arquivo ${task.title}?`,
+									// 						onDeleteConfirm: () => {
+									// 							controller.onDeleteButtonClick(task);
+									// 							sysLayoutContext.showNotification({
+									// 								message: 'Excluído com sucesso!'
+									// 							});
+									// 						}
+									// 					});
+									// 				}}
+									// 			/>
+									// 		</IconButton>
+									// 	</>
+									// }
+								>
 									<ListItemButton role={undefined} onClick={handleToggle(String(task._id))} dense>
 										<ListItemIcon>
 											<Checkbox
@@ -149,6 +151,34 @@ const ToDosListView = () => {
 										</ListItemIcon>
 										<ListItemText id={labelId} primary={task.title} />
 									</ListItemButton>
+									<ListItemSecondaryAction sx={{ display: 'flex', gap: 1 }}>
+										<IconButton edge="end" aria-label="edit" onClick={() => {}}>
+											<EditIcon
+												onClick={() => {
+													controller.changeToEdit(task._id);
+												}}
+											/>
+										</IconButton>
+										<IconButton
+											edge="end"
+											aria-label="delete"
+											onClick={() => {
+												DeleteDialog({
+													showDialog: sysLayoutContext.showDialog,
+													closeDialog: sysLayoutContext.closeDialog,
+													title: `Excluir dado ${task.title}`,
+													message: `Tem certeza que deseja excluir o arquivo "${task.title}"?`,
+													onDeleteConfirm: () => {
+														controller.onDeleteButtonClick(task);
+														sysLayoutContext.showNotification({
+															message: 'Excluído com sucesso!'
+														});
+													}
+												});
+											}}>
+											<DeleteIcon />
+										</IconButton>
+									</ListItemSecondaryAction>
 								</ListItem>
 							);
 						})}

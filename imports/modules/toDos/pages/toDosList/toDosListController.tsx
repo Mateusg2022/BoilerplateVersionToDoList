@@ -17,7 +17,8 @@ interface IInitialConfig {
 
 interface IToDosListContollerContext {
 	onAddButtonClick: () => void;
-	onDeleteButtonClick: (row: any) => void;
+	onDeleteButtonClick: (row: string) => void;
+	changeToEdit: (id: any) => void;
 	todoList: IToDos[];
 	schema: ISchema<any>;
 	loading: boolean;
@@ -75,6 +76,10 @@ const ToDosListController = () => {
 		toDosApi.remove(row);
 	}, []);
 
+	const changeToEdit = useCallback((id: string) => {
+		navigate(`/toDos/edit/${id}`);
+	}, []);
+
 	const onChangeTextField = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target;
 		const delayedSearch = setTimeout(() => {
@@ -105,6 +110,7 @@ const ToDosListController = () => {
 		() => ({
 			onAddButtonClick,
 			onDeleteButtonClick,
+			changeToEdit,
 			todoList: toDoss,
 			schema: toDosSchReduzido,
 			loading,
