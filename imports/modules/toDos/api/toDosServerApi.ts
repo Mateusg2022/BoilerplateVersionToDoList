@@ -50,6 +50,7 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 					contacts: 1,
 					title: 1,
 					description: 1,
+					createdBy: 1,
 					type: 1,
 					typeMulti: 1,
 					date: 1,

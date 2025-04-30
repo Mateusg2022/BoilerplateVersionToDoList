@@ -50,7 +50,7 @@ const ToDosDetailView = () => {
 					<FormColumn>
 						<SysTextField name="title" placeholder="Ex.: Item XX" />
 						<SysSelectField name="type" placeholder="Selecionar" />
-						<SysRadioButton name="typeMulti" childrenAlignment="row" size="small" />
+						{/* <SysRadioButton name="typeMulti" childrenAlignment="row" size="small" /> */}
 						<SysTextField
 							name="description"
 							placeholder="Acrescente informações sobre o item (3 linhas)"
@@ -60,13 +60,13 @@ const ToDosDetailView = () => {
 							showNumberCharactersTyped
 							max={200}
 						/>
-						<SysUploadFile name="files" />
-						<SysSlider name="slider" />
-						<SysLocationField name="address" />
+						{/* <SysUploadFile name="files" /> */}
+						{/* <SysSlider name="slider" /> */}
+						{/* <SysLocationField name="address" /> */}
 					</FormColumn>
-					<FormColumn>
+					{/* <FormColumn>
 						<SysCheckBox name="check" childrenAlignment="row" />
-					</FormColumn>
+					</FormColumn> */}
 				</Body>
 				<Footer>
 					{!isView && (

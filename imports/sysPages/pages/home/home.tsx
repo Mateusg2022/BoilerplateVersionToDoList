@@ -85,7 +85,7 @@ const Home: React.FC = () => {
 			<Header>
 				<Typography variant="h3">Olá, {user?.username}</Typography>
 				<Typography variant="body1" textAlign={'justify'}>
-					Seus projetos muito mais organizados. Veja as tarefas adicionadas por seu time, por você e para você
+					Seus projetos muito mais organizados. Veja as tarefas adicionadas por seu time, por você e para você.
 				</Typography>
 			</Header>
 
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
 					Tarefas recentes
 				</Typography>
 			</div>
-			<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+			<List sx={{ width: '100%', /*maxWidth: 360,*/ bgcolor: 'background.paper' }}>
 				{toDosApi
 					.find({})
 					.fetch()
@@ -137,7 +137,7 @@ const Home: React.FC = () => {
 					})}
 			</List>
 			<Button variant="contained" onClick={() => navigate('/toDos')}>
-				Lista de tarefas
+				Minhas Tarefas
 			</Button>
 		</Container>
 	);

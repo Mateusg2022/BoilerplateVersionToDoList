@@ -57,7 +57,7 @@ export const signUpStyle = {
 		position: 'relative',
 
 		[theme.breakpoints.up('md')]: {
-			backgroundImage: 'url(/images/wireframe/background-synergia.svg)',
+			// backgroundImage: 'url(/images/wireframe/background-synergia.svg)',
 			backgroundSize: 'cover',
 			backgroundPosition: 'right'
 		}

@@ -32,33 +32,6 @@ async function createDefautUser() {
 			email: 'admin@mrb.com',
 			roles: ['Administrador']
 		});
-
-		// createdUserId = '';
-		// createdUserId = await Accounts.createUserAsync({
-		// 	username: 'Mateus',
-		// 	email: 'mateus@email.com',
-		// 	password: 'password'
-		// });
-
-		// await Meteor.users.upsertAsync(
-		// 	{ _id: createdUserId },
-		// 	{
-		// 		$set: {
-		// 			'emails.0.verified': true,
-		// 			profile: {
-		// 				name: 'Mateus',
-		// 				email: 'Mateus@email.com'
-		// 			}
-		// 		}
-		// 	}
-		// );
-
-		// await userprofileServerApi.getCollectionInstance().insertAsync({
-		// 	_id: createdUserId,
-		// 	username: 'Mateus',
-		// 	email: 'mateus@email.com',
-		// 	roles: ['Usuario']
-		// });
 	}
 }
 

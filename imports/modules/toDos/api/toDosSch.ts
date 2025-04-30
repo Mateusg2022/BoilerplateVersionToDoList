@@ -171,6 +171,7 @@ export interface IToDos extends IDoc {
 	image: string;
 	title: string;
 	description: string;
+	createdBy: string;
 	check: Array<string>;
 	type: string;
 	typeMulti: string;

@@ -19,12 +19,12 @@ export const pagesRouterList: (IRoute | null)[] = [
 		isProtected: true,
 		resources: [HomeResources.HOME_VIEW]
 	},
-	{
-		path: '/sysFormTests',
-		component: SysFormPlayground,
-		isProtected: true,
-		resources: [SysFormTestPageResources.SYSFORMTESTS_VIEW]
-	},
+	// {
+	// 	path: '/sysFormTests',
+	// 	component: SysFormPlayground,
+	// 	isProtected: true,
+	// 	resources: [SysFormTestPageResources.SYSFORMTESTS_VIEW]
+	// },
 	{
 		path: '/signin',
 		component: SignInPage,

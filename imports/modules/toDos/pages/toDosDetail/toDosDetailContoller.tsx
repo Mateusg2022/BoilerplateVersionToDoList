@@ -10,6 +10,8 @@ import { IMeteorError } from '/imports/typings/BoilerplateDefaultTypings';
 // import { SysAppLayoutContext } from '/imports/app/appLayout';
 import AppLayoutContext, { IAppLayoutContext } from '/imports/app/appLayoutProvider/appLayoutContext';
 
+import AuthContext, { IAuthContext } from '/imports/app/authProvider/authContext';
+
 interface IToDosDetailContollerContext {
 	closePage: () => void;
 	document: IToDos;
@@ -28,6 +30,25 @@ const ToDosDetailController = () => {
 	const { id, state } = useContext(ToDosModuleContext);
 	// const { showNotification } = useContext(SysAppLayoutContext);
 	const { showNotification } = useContext<IAppLayoutContext>(AppLayoutContext);
+
+	const authContext = React.useContext<IAuthContext>(AuthContext);
+
+	// interface IAuthContext {
+	// 		isLoggedIn: boolean;
+	// 		user?: IUserProfile;
+	// 		userLoading: boolean;
+	// 		logout: (callback: () => void) => void;
+	// 		signIn: (email: string, password: string, callback: (err?: IMeteorError) => void) => void;
+	// }
+
+	// export interface IUserProfile extends IDoc {
+	// 	photo?: string;
+	// 	phone?: string;
+	// 	username: string;
+	// 	email: string;
+	// 	roles?: string[];
+	// 	status?: string;
+	// }
 
 	const { document, loading } = useTracker(() => {
 		const subHandle = !!id ? toDosApi.subscribe('toDosDetail', { _id: id }) : null;

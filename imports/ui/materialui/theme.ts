@@ -88,7 +88,7 @@ const getLightThemeBase = (props: { fontScale: number }): ThemeOptions => {
 	return {
 		palette: sysLightPalette,
 		typography: SysFonts.getTypography(fontScale),
-		spacing: 8,
+		spacing: 8
 	};
 };
 

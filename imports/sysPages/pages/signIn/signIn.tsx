@@ -12,6 +12,8 @@ import SysIcon from '../../../ui/components/sysIcon/sysIcon';
 import AuthContext, { IAuthContext } from '/imports/app/authProvider/authContext';
 import AppLayoutContext from '/imports/app/appLayoutProvider/appLayoutContext';
 
+import AppsIcon from '@mui/icons-material/Apps';
+
 const SignInPage: React.FC = () => {
 	const { showNotification } = useContext(AppLayoutContext);
 	const { user, signIn } = useContext<IAuthContext>(AuthContext);
@@ -48,10 +50,17 @@ const SignInPage: React.FC = () => {
 		<Container>
 			<Content>
 				<Typography variant="h1" display={'inline-flex'} gap={1}>
-					<Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
+					{/* <Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
 						{'{'}
 					</Typography>
 					Boilerplate
+					<Typography variant="inherit" color="sysText.tertiary">
+						{'}'}
+					</Typography> */}
+					<Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
+						{'{'}
+					</Typography>
+					To Do List App{' '}
 					<Typography variant="inherit" color="sysText.tertiary">
 						{'}'}
 					</Typography>
@@ -80,8 +89,6 @@ const SignInPage: React.FC = () => {
 						Criar conta
 					</Button>
 				</FormContainer>
-
-				<Box component="img" src="/images/wireframe/synergia-logo.svg" sx={{ width: '100%', maxWidth: '400px' }} />
 			</Content>
 		</Container>
 	);

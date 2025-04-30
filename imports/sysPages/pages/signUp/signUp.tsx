@@ -50,6 +50,7 @@ export const SignUp = (props: ISignUp) => {
 						title: 'Problema na criação do usuário!',
 						description: 'Erro ao fazer registro em nossa base de dados!'
 					});
+				navigate('/signin');
 			} else {
 				showNotification &&
 					showNotification({
@@ -57,46 +58,12 @@ export const SignUp = (props: ISignUp) => {
 						title: 'Cadastrado com sucesso!',
 						description: 'Registro de usuário realizado em nossa base de dados!'
 					});
-				navigate('/');
+				navigate('/signin');
 			}
 		});
 	};
 
 	return (
-		// <Container style={signUpStyle.containerSignUp}>
-		// 	<Box sx={signUpStyle.labelRegisterSystem}>
-		// 		<img src="/images/wireframe/logo.png" style={signUpStyle.imageLogo} />
-		// 		{'Cadastrar no sistema'}
-		// 	</Box>
-		// 	<SimpleForm
-		// 		schema={{
-		// 			email: {
-		// 				type: String,
-		// 				label: 'Email',
-		// 				optional: false
-		// 			},
-		// 			password: {
-		// 				type: String,
-		// 				label: 'Senha',
-		// 				optional: false
-		// 			}
-		// 		}}
-		// 		onSubmit={handleSubmit}>
-		// 		<TextField id="Email" label="Email" fullWidth name="email" type="email" placeholder="Digite um email" />
-		// 		<TextField id="Senha" label="Senha" fullWidth name="password" placeholder="Digite uma senha" type="password" />
-		// 		<Box sx={signUpStyle.containerButtonOptions}>
-		// 			<Button color={'primary'} variant={'outlined'} id="submit">
-		// 				Cadastrar
-		// 			</Button>
-		// 		</Box>
-		// 	</SimpleForm>
-		// 	<Box sx={signUpStyle.containerRouterSignIn}>
-		// 		Já tem uma conta? Faça login clicando{' '}
-		// 		<Link to="/signin" color={'secondary'}>
-		// 			aqui
-		// 		</Link>
-		// 	</Box>
-
 		<>
 			<Container>
 				<Content>
@@ -124,8 +91,6 @@ export const SignUp = (props: ISignUp) => {
 							</FormWrapper>
 						</SysForm>
 					</FormContainer>
-
-					<Box component="img" src="/images/wireframe/synergia-logo.svg" sx={{ width: '100%', maxWidth: '400px' }} />
 				</Content>
 			</Container>
 		</>
