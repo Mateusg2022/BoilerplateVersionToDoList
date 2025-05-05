@@ -114,19 +114,16 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 		});
 
 		//intuito: atalizar a categoria de uma task, pro ícone de check
-		this.registerMethod(
-			'updateCategoria',
-			(id: string, novaCategoria: string, callback?: (err?: IMeteorError) => void) => {
-				console.log('[updateCategoria] id:', id, 'novaCategoria:', novaCategoria);
-				const collection = this.getCollectionInstance();
-				console.log('[updateCategoria] collection:', !!collection);
+		this.registerMethod('updateCategoria', (id: string, novaCategoria: string, callback?: (err: any) => void) => {
+			// console.log('updateCategria id:', id, 'novaCategoria:', novaCategoria);
+			const collection = this.getCollectionInstance();
+			// console.log('updateCategria collection :', !!collection);
 
-				const result = collection.update({ _id: id }, { $set: { type: novaCategoria } }, callback);
+			const result = collection.updateAsync({ _id: id }, { $set: { type: novaCategoria } });
 
-				console.log('[updateCategoria] update result:', result);
-				return result;
-			}
-		);
+			// console.log('updateCategria update result:', result);
+			return result;
+		});
 	}
 }
 
