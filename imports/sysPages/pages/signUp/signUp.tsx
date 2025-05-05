@@ -69,11 +69,11 @@ export const SignUp = (props: ISignUp) => {
 				<Content>
 					<Typography variant="h1" display={'inline-flex'} gap={1}>
 						<Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
-							{'{'}
+							{/* {'{'} */}
 						</Typography>
-						Boilerplate
+						Criar Conta
 						<Typography variant="inherit" color="sysText.tertiary">
-							{'}'}
+							{/* {'}'} */}
 						</Typography>
 					</Typography>
 

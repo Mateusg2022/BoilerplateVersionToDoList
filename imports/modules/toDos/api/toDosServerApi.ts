@@ -38,8 +38,8 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 				const userProfileDoc: IUserProfile = await userprofileServerApi
 					.getCollectionInstance()
 					.findOneAsync({ _id: doc.createdby });
-				return { ...doc };
-				//return { ...doc, username: userProfileDoc.username };
+				//return { ...doc };
+				return { ...doc, username: userProfileDoc.username };
 				// return { ...doc, user: userProfileDoc.username };
 			}
 		);
@@ -65,14 +65,6 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 			});
 		});
 
-		// this.addPublication('toDosListResume', (filter = {}) => {
-		// 	return this.defaultListCollectionPublication(filter, {
-		// 		limit: 5,
-		// 		sort: { createdat: -1 },
-		// 		projection: { title: 1, type: 1, typeMulti: 1, createdat: 1 }
-		// 	});
-		// });
-
 		this.addRestEndpoint(
 			'view',
 			(params, options) => {
@@ -81,6 +73,14 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 				return { status: 'ok' };
 			},
 			['post']
+
+			// this.addPublication('toDosListResume', (filter = {}) => {
+			// 	return this.defaultListCollectionPublication(filter, {
+			// 		limit: 5,
+			// 		sort: { createdat: -1 },
+			// 		projection: { title: 1, type: 1, typeMulti: 1, createdat: 1 }
+			// 	});
+			// });
 		);
 
 		this.addRestEndpoint(
@@ -112,6 +112,21 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 			// 	sort: { createdat: -1 }
 			// });
 		});
+
+		//intuito: atalizar a categoria de uma task, pro ícone de check
+		this.registerMethod(
+			'updateCategoria',
+			(id: string, novaCategoria: string, callback?: (err?: IMeteorError) => void) => {
+				console.log('[updateCategoria] id:', id, 'novaCategoria:', novaCategoria);
+				const collection = this.getCollectionInstance();
+				console.log('[updateCategoria] collection:', !!collection);
+
+				const result = collection.update({ _id: id }, { $set: { type: novaCategoria } }, callback);
+
+				console.log('[updateCategoria] update result:', result);
+				return result;
+			}
+		);
 	}
 }
 

@@ -9,6 +9,7 @@ import { CircularProgress, Typography } from '@mui/material';
 
 import { useCallback, useMemo } from 'react';
 
+import { useState } from 'react';
 import AuthContext from '/imports/app/authProvider/authContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,8 +41,17 @@ import CommentIcon from '@mui/icons-material/Comment';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import Button from '@mui/material/Button';
+
+import Modal from '@mui/material/Modal';
+import ToDosDetailController from '../../../modules/toDos/pages/toDosDetail/toDosDetailContoller';
+import { ToDosModuleContext } from '../../../modules/toDos/toDosContainer';
+
+import { userprofileApi } from '../../../modules/userprofile/api/userProfileApi';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 const Home: React.FC = () => {
 	const { Container, Header } = HomeStyles;
@@ -80,20 +90,75 @@ const Home: React.FC = () => {
 		setChecked(newChecked);
 	};
 
+	const isReady = useTracker(() => {
+		const handleUserProfileApi = userprofileApi.subscribe('userProfileList');
+		return handleUserProfileApi.ready();
+	}, []);
+
+	const modalStyle = {
+		position: 'absolute' as const,
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: '90%',
+		maxWidth: 600,
+		bgcolor: 'background.paper',
+		boxShadow: 24,
+		p: 4,
+		borderRadius: 2
+	};
+
+	const [isOpen, setIsOpen] = useState(false);
+	const [currentId, setCurrentId] = useState<string | undefined>(undefined);
+
+	const moduleState = {
+		id: currentId,
+		state: 'view' //'create', 'edit'
+	};
+
 	return (
 		<Container>
+			<Modal
+				open={isOpen}
+				onClose={() => {
+					setIsOpen(false);
+					setCurrentId(undefined);
+				}}>
+				<Box sx={modalStyle}>
+					<IconButton
+						aria-label="close"
+						onClick={() => {
+							setIsOpen(false);
+							setCurrentId(undefined);
+						}}
+						sx={{
+							position: 'absolute',
+							right: 8,
+							top: 8,
+							color: (theme) => theme.palette.grey[500]
+						}}>
+						<CloseIcon />
+					</IconButton>
+
+					{/* conteudo do modal */}
+					<ToDosModuleContext.Provider value={moduleState}>
+						<ToDosDetailController />
+					</ToDosModuleContext.Provider>
+				</Box>
+			</Modal>
+
 			<Header>
-				<Typography variant="h3">Olá, {user?.username}</Typography>
+				<Typography variant="h2">Olá, {user?.username}</Typography>
 				<Typography variant="body1" textAlign={'justify'}>
 					Seus projetos muito mais organizados. Veja as tarefas adicionadas por seu time, por você e para você.
 				</Typography>
 			</Header>
 
 			<div>
-				<Typography variant="h2">To-Do List</Typography>
-				<Typography variant="body1" textAlign={'justify'}>
+				<Typography variant="h3">Atividades recentes</Typography>
+				{/* <Typography variant="body1" textAlign={'justify'}>
 					Tarefas recentes
-				</Typography>
+				</Typography> */}
 			</div>
 			<List sx={{ width: '100%', /*maxWidth: 360,*/ bgcolor: 'background.paper' }}>
 				{toDosApi
@@ -105,6 +170,10 @@ const Home: React.FC = () => {
 						return (
 							<ListItem
 								key={task._id}
+								onClick={() => {
+									setCurrentId(task._id);
+									setIsOpen(true);
+								}}
 								secondaryAction={
 									<>
 										<IconButton>
@@ -130,7 +199,15 @@ const Home: React.FC = () => {
 											inputProps={{ 'aria-labelledby': labelId }}
 										/>
 									</ListItemIcon>
-									<ListItemText id={labelId} primary={task.title} />
+									<KeyboardArrowRightIcon />
+									<ListItemText
+										id={labelId}
+										primary={
+											<Typography variant="h6" fontWeight="bold" color="primary">
+												{' ' + task.title}
+											</Typography>
+										}
+									/>
 								</ListItemButton>
 							</ListItem>
 						);

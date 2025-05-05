@@ -126,9 +126,9 @@ const sysLightPalette: PaletteOptions = {
 	},
 
 	secondary: {
-		light: sysGreenColors[95],
-		main: sysGreenColors[80]!,
-		dark: sysGreenColors[60],
+		light: sysGreyColors[95],
+		main: sysGreyColors[80]!,
+		dark: sysGreyColors[60],
 		contrastText: sysGreyColors[20]
 	},
 
@@ -140,9 +140,9 @@ const sysLightPalette: PaletteOptions = {
 	},
 
 	success: {
-		light: sysGreenColors[95],
-		main: sysGreenColors[60]!,
-		dark: sysGreenColors[40],
+		light: sysGreyColors[95],
+		main: sysGreyColors[60]!,
+		dark: sysGreyColors[40],
 		contrastText: sysCommonColors.white
 	},
 
@@ -181,7 +181,8 @@ const sysLightPalette: PaletteOptions = {
 		base: sysCommonColors.white,
 		baseContrast: sysCommonColors.black,
 		primary: sysGreyColors[50],
-		secondary: sysGreenColors[80],
+		// secondary: sysGreenColors[80],
+		secondary: sysGreyColors[20],
 		tertiary: sysBlueColors[80]
 	},
 	background: {

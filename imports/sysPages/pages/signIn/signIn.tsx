@@ -58,11 +58,11 @@ const SignInPage: React.FC = () => {
 						{'}'}
 					</Typography> */}
 					<Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
-						{'{'}
+						{/* {'{'} */}
 					</Typography>
 					To Do List App{' '}
 					<Typography variant="inherit" color="sysText.tertiary">
-						{'}'}
+						{/* {'}'} */}
 					</Typography>
 				</Typography>
 

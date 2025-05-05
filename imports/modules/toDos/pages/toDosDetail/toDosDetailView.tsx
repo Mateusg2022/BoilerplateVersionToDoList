@@ -27,11 +27,11 @@ const ToDosDetailView = () => {
 	return (
 		<Container>
 			<Header>
-				{isView && (
+				{/* {isView && (
 					<IconButton onClick={controller.closePage}>
 						<SysIcon name={'arrowBack'} />
 					</IconButton>
-				)}
+				)} */}
 				<Typography variant="h5" sx={{ flexGrow: 1 }}>
 					{isCreate ? 'Adicionar Item' : isEdit ? 'Editar Item' : controller.document.title}
 				</Typography>
@@ -48,7 +48,7 @@ const ToDosDetailView = () => {
 				loading={controller.loading}>
 				<Body>
 					<FormColumn>
-						<SysTextField name="title" placeholder="Ex.: Item XX" />
+						<SysTextField name="title" placeholder="Ex.: Checar e-mails" />
 						<SysSelectField name="type" placeholder="Selecionar" />
 						{/* <SysRadioButton name="typeMulti" childrenAlignment="row" size="small" /> */}
 						<SysTextField
@@ -64,9 +64,7 @@ const ToDosDetailView = () => {
 						{/* <SysSlider name="slider" /> */}
 						{/* <SysLocationField name="address" /> */}
 					</FormColumn>
-					{/* <FormColumn>
-						<SysCheckBox name="check" childrenAlignment="row" />
-					</FormColumn> */}
+					{/* <Fof> */}
 				</Body>
 				<Footer>
 					{!isView && (

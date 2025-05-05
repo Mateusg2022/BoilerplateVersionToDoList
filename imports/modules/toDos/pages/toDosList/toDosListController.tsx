@@ -7,6 +7,7 @@ import { ISchema } from '/imports/typings/ISchema';
 import { IToDos } from '../../api/toDosSch';
 import { toDosApi } from '../../api/toDosApi';
 import { string } from 'prop-types';
+
 //here
 interface IInitialConfig {
 	sortProperties: { field: string; sortAscending: boolean };
