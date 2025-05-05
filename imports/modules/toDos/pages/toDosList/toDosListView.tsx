@@ -38,7 +38,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Pagination from '@mui/material/Pagination';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-import toDosApi from '../../api/toDosApi';
+import { toDosApi } from '../../api/toDosApi';
 
 import { userprofileApi } from '../../../userprofile/api/userProfileApi';
 
@@ -56,6 +56,10 @@ import ToDosDetailController from '../toDosDetail/toDosDetailContoller';
 import { ToDosModuleContext } from '../../toDosContainer';
 
 import CloseIcon from '@mui/icons-material/Close';
+
+import { IToDos } from '../../api/toDosSch';
+
+import SysFonts from '../../../../ui/materialui/sysFonts';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -150,17 +154,35 @@ const ToDosListView = () => {
 
 	const { document, onSubmit } = React.useContext(ToDosDetailControllerContext);
 
-	const handleCheckboxClick = (taskId: string | undefined) => {
-		if (taskId == undefined) return;
+	const hanldeToDosApi = toDosApi.subscribe('updateCategoria');
 
-		/**  */
-		Meteor.call('toDos.updateCategoria', taskId, 'Concluída', (err) => {
-			if (err) {
-				console.error('Erro ao atualizar categoria:', err.reason);
-			} else {
-				console.log('Categoria atualizada com sucesso!');
+	const handleCheckboxClick = (task: IToDos) => {
+		if (task._id == undefined) return;
+
+		const handleToDosApi = toDosApi.subscribe('updateCategoria');
+
+		//Meteor.call('toDos.updateCategoria', taskId, 'Concluída', (err) => {
+		// if (err) {
+		// 		console.error('Erro ao atualizar categoriaa:', err.reason);
+		// 	} else {
+		// 		console.log('Categoria atualizada');
+		// 	}
+		// });
+
+		toDosApi.update(
+			{
+				_id: task._id,
+				title: task.title,
+				type: 'Concluída'
+			},
+			(err) => {
+				if (err) {
+					console.error('Erro ao atualizar categora:', err.reason);
+				} else {
+					console.log('Categoria atualizada');
+				}
 			}
-		});
+		);
 		/** */
 	};
 
@@ -261,7 +283,7 @@ const ToDosListView = () => {
 													onClick={(e) => {
 														{
 															e.stopPropagation();
-															handleCheckboxClick(task._id);
+															handleCheckboxClick(task);
 														}
 													}}
 													onChange={handleToggle(String(task._id))}
@@ -270,13 +292,25 @@ const ToDosListView = () => {
 											<KeyboardArrowRightIcon />
 											<ListItemText
 												id={labelId}
+												//se a tarefa estiver marcada, o texto fica grifado
 												primary={
-													<Typography variant="h6" fontWeight="bold" color="primary">
-														{' ' + task.title}
-													</Typography>
+													checked.includes(String(task._id)) ? (
+														<Typography sx={{ ...SysFonts.h6(), textDecoration: 'line-through' }} color="primary">
+															{' ' + task.title}
+														</Typography>
+													) : (
+														<Typography variant="h6" fontWeight="bold" color="primary">
+															{' ' + task.title}
+														</Typography>
+													)
 												}
 												secondary={
-													<Typography color="primary">{' ' + searchUsernameById(task.createdby || '')}</Typography>
+													<Typography sx={{ ...SysFonts.body1() }} color="primary">
+														Criada por:{' '}
+														<Typography component="span" sx={SysFonts.link()} color="primary">
+															{searchUsernameById(task.createdby || '')}
+														</Typography>
+													</Typography>
 												}
 											/>
 										</ListItemButton>
@@ -359,98 +393,3 @@ const ToDosListView = () => {
 };
 
 export default ToDosListView;
-
-// return (
-// 	<Container>
-// 		<Typography variant="h4">ToDos</Typography>
-// 		<Typography variant="h5">Lista de Itens</Typography>
-// 		<SearchContainer>
-// 			<SysTextField
-// 				name="search"
-// 				placeholder="Pesquisar por nome"
-// 				onChange={controller.onChangeTextField}
-// 				startAdornment={<SysIcon name={'search'} />}
-// 			/>
-// 			<SysSelectField
-// 				name="Category"
-// 				label="Categoria"
-// 				options={options}
-// 				placeholder="Selecionar"
-// 				onChange={controller.onChangeCategory}
-// 			/>
-// 		</SearchContainer>
-// 		{controller.loading ? (
-// 			<LoadingContainer>
-// 				<CircularProgress />
-// 				<Typography variant="body1">Aguarde, carregando informações...</Typography>
-// 			</LoadingContainer>
-// 		) : (
-// 			<Box sx={{ width: '100%' }}>
-// 				<List sx={{ width: '100%', /*maxWidth: 360,*/ bgcolor: 'background.paper' }}>
-// 					{Array.isArray(controller.todoList) &&
-// 						controller.todoList
-// 							.sort((a, b) => (b.createdat || 0) - (a.createdat || 0))
-// 							.map((task) => {
-// 								const labelId = `checkbox-list-label-${task.title}`;
-
-// 								return (
-// 									<ListItem
-// 										onClick={() => navigate('/toDos/view/' + task._id)}
-// 										sx={{ width: '100%' }}
-// 										key={task._id}
-// 										disablePadding>
-// 										<ListItemButton role={undefined} onClick={handleToggle(String(task._id))} dense>
-// 											<ListItemIcon>
-// 												<Checkbox
-// 													edge="start"
-// 													checked={checked.includes(String(task._id))}
-// 													tabIndex={-1}
-// 													disableRipple
-// 													inputProps={{ 'aria-labelledby': labelId }}
-// 												/>
-// 											</ListItemIcon>
-// 											<ListItemText id={labelId} primary={task.title} />
-// 										</ListItemButton>
-// 										<ListItemSecondaryAction sx={{ display: 'flex', gap: 1 }}>
-// 											<IconButton edge="end" aria-label="edit" onClick={() => {}}>
-// 												<EditIcon
-// 													onClick={() => {
-// 														controller.changeToEdit(task._id);
-// 													}}
-// 												/>
-// 											</IconButton>
-// 											<IconButton
-// 												edge="end"
-// 												aria-label="delete"
-// 												onClick={() => {
-// 													DeleteDialog({
-// 														showDialog: sysLayoutContext.showDialog,
-// 														closeDialog: sysLayoutContext.closeDialog,
-// 														title: `Excluir dado ${task.title}`,
-// 														message: `Tem certeza que deseja excluir o arquivo "${task.title}"?`,
-// 														onDeleteConfirm: () => {
-// 															controller.onDeleteButtonClick(task);
-// 															sysLayoutContext.showNotification({
-// 																message: 'Excluído com sucesso!'
-// 															});
-// 														}
-// 													});
-// 												}}>
-// 												<DeleteIcon />
-// 											</IconButton>
-// 										</ListItemSecondaryAction>
-// 									</ListItem>
-// 								);
-// 							})}
-// 				</List>
-// 			</Box>
-// 		)}
-// 		<SysFab
-// 			variant="extended"
-// 			text="Adicionar"
-// 			startIcon={<SysIcon name={'add'} />}
-// 			fixed={true}
-// 			onClick={controller.onAddButtonClick}
-// 		/>
-// 	</Container>
-// );
