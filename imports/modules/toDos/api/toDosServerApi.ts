@@ -2,6 +2,7 @@
 import { Recurso } from '../config/recursos';
 import { toDosSch, IToDos } from './toDosSch';
 import { userprofileServerApi } from '/imports/modules/userprofile/api/userProfileServerApi';
+import { getUserServer } from '/imports/modules/userprofile/api/userProfileServerApi';
 import { ProductServerBase } from '/imports/api/productServerBase';
 import { IUserProfile } from '../../userprofile/api/userProfileSch';
 
@@ -19,11 +20,26 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 		this.addTransformedPublication(
 			'toDosList',
 			(filter = {}, options = {}) => {
-				return this.getCollectionInstance().find(filter, {
-					...options,
-					// limit: 6,
-					sort: { createdat: -1 }
-				});
+				const user = getUserServer();
+
+				return this.getCollectionInstance().find(
+					{
+						$and: [
+							filter,
+							{
+								$or: [
+									{ isPrivate: { $ne: true } }, // não é pessoal
+									{ createdby: user._id } // ou é do próprio usuário
+								]
+							}
+						]
+					},
+					{
+						...options,
+						// limit: 6,
+						sort: { createdat: -1 }
+					}
+				);
 			},
 			// return this.defaultListCollectionPublication(filter, {
 			// 	projection: { title: 1, type: 1, typeMulti: 1, createdat: 1 }
