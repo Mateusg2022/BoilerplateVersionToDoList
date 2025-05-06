@@ -60,6 +60,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IToDos } from '../../api/toDosSch';
 
 import SysFonts from '../../../../ui/materialui/sysFonts';
+import { Task } from '@mui/icons-material';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -99,7 +100,12 @@ const ToDosListView = () => {
 	// 	status?: string;
 	// }
 
-	const [checked, setChecked] = React.useState<string[]>([]);
+	// const [checked, setChecked] = React.useState<string[]>([]);
+
+	const getCompletedTasks = controller.todoList.map((task => {
+		if(task.type == "Concluída")
+	}))
+	const [checked, setChecked] = React.useState<string[]>(controller.todoList);
 
 	const [page, setPage] = useState(1);
 
@@ -295,17 +301,17 @@ const ToDosListView = () => {
 												//se a tarefa estiver marcada, o texto fica grifado
 												primary={
 													checked.includes(String(task._id)) ? (
-														<Typography sx={{ ...SysFonts.h6(), textDecoration: 'line-through' }} color="primary">
+														<Typography sx={{ ...SysFonts.h6(), textDecoration: 'line-through', fontWeight:"bold"}}  color="primary">
 															{' ' + task.title}
 														</Typography>
 													) : (
-														<Typography variant="h6" fontWeight="bold" color="primary">
+														<Typography sx={{...SysFonts.h6(), fontWeight:"bold"}} fontWeight="bold" color="primary">
 															{' ' + task.title}
 														</Typography>
 													)
 												}
 												secondary={
-													<Typography sx={{ ...SysFonts.body1() }} color="primary">
+													<Typography sx={{ ...SysFonts.body1()}} color="primary">
 														Criada por:{' '}
 														<Typography component="span" sx={SysFonts.link()} color="primary">
 															{searchUsernameById(task.createdby || '')}
@@ -319,15 +325,16 @@ const ToDosListView = () => {
 												edge="end"
 												aria-label="edit"
 												onClick={() => {
-													if (task.createdby === authContext?.user?.username) {
+													if (task.createdby === authContext?.user?._id) {
 														controller.changeToEdit(task._id);
 													} else {
+														// console.log("curr: ", authContext?.user?.username, " - ", "createdby: ", task.createdby)
 														//alert('Essa tarefa pertence a outro usuário');
 														sysLayoutContext.showNotification({
 															title: 'Autorização negada.',
 															message: 'Essa tarefa pertence a outro usuário',
 															type: 'default',
-															showCloseButton: true,
+															// showCloseButton: true,
 															actionButtonTex: 'Fechar',
 															duration: 3000
 														});
@@ -339,7 +346,7 @@ const ToDosListView = () => {
 												edge="end"
 												aria-label="delete"
 												onClick={() => {
-													if (task.createdby === authContext?.user?.username) {
+													if (task.createdby === authContext?.user?._id) {
 														DeleteDialog({
 															showDialog: sysLayoutContext.showDialog,
 															closeDialog: sysLayoutContext.closeDialog,
@@ -358,7 +365,7 @@ const ToDosListView = () => {
 															title: 'Autorização negada.',
 															message: 'Essa tarefa pertence a outro usuário',
 															type: 'default',
-															showCloseButton: true,
+															// showCloseButton: true,
 															actionButtonTex: 'Fechar',
 															duration: 3000
 														});

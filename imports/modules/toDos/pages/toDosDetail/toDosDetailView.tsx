@@ -14,6 +14,10 @@ import SysFormButton from '/imports/ui/components/sysFormFields/sysFormButton/sy
 import { SysUploadFile } from '/imports/ui/components/sysFormFields/sysUploadFile/sysUploadFile';
 import SysSlider from '/imports/ui/components/sysFormFields/sysSlider/sysSliderField';
 import { SysLocationField } from '/imports/ui/components/sysFormFields/sysLocationField/sysLocationField';
+
+import { useState } from 'react';
+import { Switch, FormControlLabel } from '@mui/material';
+
 import SysIcon from '/imports/ui/components/sysIcon/sysIcon';
 
 const ToDosDetailView = () => {
@@ -23,6 +27,8 @@ const ToDosDetailView = () => {
 	const isEdit = state === 'edit';
 	const isCreate = state === 'create';
 	const { Container, Body, Header, Footer, FormColumn } = ToDosDetailStyles;
+
+	const [isPrivate, setIsPrivate] = useState(false); // false = pública
 
 	return (
 		<Container>
@@ -50,15 +56,19 @@ const ToDosDetailView = () => {
 					<FormColumn>
 						<SysTextField name="title" placeholder="Ex.: Checar e-mails" />
 						<SysSelectField name="type" placeholder="Selecionar" />
+						<FormControlLabel
+							control={<Switch checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} color="primary" />}
+							label={isPrivate ? 'Privada' : 'Pública'}
+						/>
 						{/* <SysRadioButton name="typeMulti" childrenAlignment="row" size="small" /> */}
 						<SysTextField
 							name="description"
 							placeholder="Acrescente informações sobre o item (3 linhas)"
 							multiline
 							rows={3}
-							// maxRows={3}
+							maxRows={3}
 							showNumberCharactersTyped
-							max={200}
+							max={100}
 						/>
 						{/* <SysUploadFile name="files" /> */}
 						{/* <SysSlider name="slider" /> */}
