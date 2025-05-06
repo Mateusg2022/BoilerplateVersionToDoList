@@ -46,6 +46,20 @@ export const toDosSch: ISchema<IToDos> = {
 			{ value: 'Em andamento', label: 'Em andamento' },
 			{ value: 'Concluída', label: 'Concluída' }
 		]
+	},
+
+	check: {
+		type: Boolean,
+		label: 'Checkbox',
+		defaultValue: false,
+		optional: true
+	},
+
+	isPrivate: {
+		type: Boolean,
+		label: 'private',
+		defaultValue: false,
+		optional: false
 	}
 	// check: {
 	// 	type: Array<String>,
