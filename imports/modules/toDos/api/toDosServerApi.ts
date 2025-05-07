@@ -6,6 +6,10 @@ import { getUserServer } from '/imports/modules/userprofile/api/userProfileServe
 import { ProductServerBase } from '/imports/api/productServerBase';
 import { IUserProfile } from '../../userprofile/api/userProfileSch';
 
+import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import { userprofileApi } from '../../userprofile/api/userProfileApi';
+
 // endregion
 
 class ToDosServerApi extends ProductServerBase<IToDos> {
@@ -17,48 +21,79 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 
 		const self = this;
 
-		this.addTransformedPublication(
-			'toDosList',
-			(filter = {}, options = {}) => {
-				const user = getUserServer();
+		// this.addPublication('toDosList', (filter = {}, options = {}) => {
+		// 	const user = getUserServer();
 
-				return this.getCollectionInstance().find(
-					{
-						$and: [
-							filter,
-							{
-								$or: [
-									{ isPrivate: { $ne: true } }, // não é pessoal
-									{ createdby: user._id } // ou é do próprio usuário
-								]
-							}
-						]
-					},
-					{
-						...options,
-						// limit: 6,
-						sort: { createdat: -1 }
-					}
-				);
-			},
-			// return this.defaultListCollectionPublication(filter, {
-			// 	projection: { title: 1, type: 1, typeMulti: 1, createdat: 1 }
-			// });
+		// 	return this.getCollectionInstance().find(
+		// 		{
+		// 			$or: [{ isPrivate: false }, { createdby: user._id }]
+		// 			//	...filter
+		// 		},
+		// 		{
+		// 			//...options,
+		// 			// limit: 6,
+		// 			sort: { createdat: -1 }
+		// 		}
+		// 	);
+		// });
 
-			// (doc: IToDos & { nomeUsuario: string }) => {
-			// 	const userProfileDoc = await userprofileServerApi.getCollectionInstance().findOneAsync({ _id: doc.createdby });
-			// 	return { ...doc };
-			// }
+		// this.addTransformedPublication(
+		// 	'toDosList',
+		// 	async (filter = {}, options = {}) => {
+		// 		const user = await Meteor.userAsync();
+		// 		console.log('user_id: ', user._id);
+		// 		return this.getCollectionInstance().find(
+		// 			{
+		// 				$or: [{ isPrivate: false }, { createdby: user._id }],
+		// 				...filter
+		// 			},
+		// 			{
+		// 				...options,
+		// 				// limit: 6,
+		// 				sort: { createdat: -1 }
+		// 			}
+		// 		);
+		// 	},
 
-			async (doc: IToDos & { nomeUsuario: string }) => {
-				const userProfileDoc: IUserProfile = await userprofileServerApi
-					.getCollectionInstance()
-					.findOneAsync({ _id: doc.createdby });
-				//return { ...doc };
-				return { ...doc, username: userProfileDoc.username };
-				// return { ...doc, user: userProfileDoc.username };
+		// 	async (doc: IToDos & { nomeUsuario: string }) => {
+		// 		// console.log('Transforming doc:', doc._id);
+		// 		const userProfileDoc = await userprofileServerApi.getCollectionInstance().findOneAsync({ _id: doc.createdby });
+		// 		// console.log('User profile result:', userProfileDoc);
+		// 		return { ...doc };
+		// 		//return { ...doc, username: userProfileDoc.username };
+		// 	}
+		// );
+
+		this.addPublication('toDosList', async (filter = {}, options = {}) => {
+			const user = await Meteor.userAsync();
+			// console.log('user_id: ', user._id);
+
+			//espera conseguir o user id antes
+			if (!user?._id) {
+				return [];
 			}
-		);
+			const query = {
+				$or: [{ isPrivate: false }, { createdby: user._id }],
+				...filter
+			};
+
+			return toDosServerApi.getCollectionInstance().find(query, {
+				...options,
+				sort: { createdat: -1 }
+			});
+
+			// return this.getCollectionInstance().find(
+			// 	{
+			// 		$or: [{ isPrivate: false }, { createdby: user._id }],
+			// 		...filter
+			// 	},
+			// 	{
+			// 		...options,
+			// 		// limit: 6,
+			// 		sort: { createdat: -1 }
+			// 	}
+			// );
+		});
 
 		this.addPublication('toDosDetail', (filter = {}) => {
 			return this.defaultDetailCollectionPublication(filter, {

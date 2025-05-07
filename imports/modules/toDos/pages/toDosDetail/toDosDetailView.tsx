@@ -16,8 +16,8 @@ import SysSlider from '/imports/ui/components/sysFormFields/sysSlider/sysSliderF
 import { SysLocationField } from '/imports/ui/components/sysFormFields/sysLocationField/sysLocationField';
 
 import { useState } from 'react';
-import { Switch, FormControlLabel } from '@mui/material';
-
+//import { Switch, FormControlLabel } from '@mui/material';
+import SysSwitch from '../../../../ui/components/sysFormFields/sysSwitch/sysSwitch';
 import SysIcon from '/imports/ui/components/sysIcon/sysIcon';
 
 const ToDosDetailView = () => {
@@ -56,10 +56,13 @@ const ToDosDetailView = () => {
 					<FormColumn>
 						<SysTextField name="title" placeholder="Ex.: Checar e-mails" />
 						<SysSelectField name="type" placeholder="Selecionar" />
-						<FormControlLabel
+						{/* <FormControlLabel
 							control={<Switch checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} color="primary" />}
 							label={isPrivate ? 'Privada' : 'Pública'}
-						/>
+						/> */}
+						{isCreate && (
+							<SysSwitch name="isPrivate" label="Tarefa pessoal?" firstText="Privada" secondText="Pública" />
+						)}
 						{/* <SysRadioButton name="typeMulti" childrenAlignment="row" size="small" /> */}
 						<SysTextField
 							name="description"

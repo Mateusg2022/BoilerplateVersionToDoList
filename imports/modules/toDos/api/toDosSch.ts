@@ -190,6 +190,7 @@ export interface IToDos extends IDoc {
 	type: string;
 	typeMulti: string;
 	date: Date;
+	isPrivate: boolean;
 	files: object[];
 	chip: string[];
 	contacts: object;

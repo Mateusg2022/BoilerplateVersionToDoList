@@ -73,7 +73,7 @@ const Home: React.FC = () => {
 		return toDosApi.find({}, { sort: { createdAt: -1 }, limit: 5 }).fetch();
 	}, []);
 
-	console.log('here: ', toDosApi.find({}).fetch());
+	// console.log('here: ', toDosApi.find({}).fetch());
 
 	const [checked, setChecked] = React.useState<string[]>([]);
 
