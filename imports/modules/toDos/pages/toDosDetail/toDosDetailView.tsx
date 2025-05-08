@@ -60,7 +60,7 @@ const ToDosDetailView = () => {
 							control={<Switch checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} color="primary" />}
 							label={isPrivate ? 'Privada' : 'Pública'}
 						/> */}
-						{isCreate && (
+						{(isCreate || isEdit) && (
 							<SysSwitch name="isPrivate" label="Tarefa pessoal?" firstText="Privada" secondText="Pública" />
 						)}
 						{/* <SysRadioButton name="typeMulti" childrenAlignment="row" size="small" /> */}

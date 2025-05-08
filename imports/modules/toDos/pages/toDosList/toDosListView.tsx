@@ -18,7 +18,7 @@ import AppLayoutContext, { IAppLayoutContext } from '/imports/app/appLayoutProvi
 // import { SysAppLayoutContext } from '../../../../app/appLayoutProvider';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Switch from "imports/ui/components/sysFormFields/sysSwitch/sysSwitch"
+import Switch from 'imports/ui/components/sysFormFields/sysSwitch/sysSwitch';
 // import { ToDosModuleContext } from '../../toDosContainer';
 import AuthContext, { IAuthContext } from '/imports/app/authProvider/authContext';
 
@@ -102,25 +102,9 @@ const ToDosListView = () => {
 
 	// const [checked, setChecked] = React.useState<string[]>([]);
 
-	const getCompletedTasks = controller.todoList.map((task => {
-		if(task.type == "Concluída")
-	}))
-	const [checked, setChecked] = React.useState<string[]>(controller.todoList);
+	const [checked, setChecked] = React.useState<string[]>(controller.todoList.map((task) => String(task._id)));
 
 	const [page, setPage] = useState(1);
-
-	const handleToggle = (value: string) => () => {
-		const currentIndex = checked.indexOf(value);
-		const newChecked = [...checked];
-
-		if (currentIndex === -1) {
-			newChecked.push(value);
-		} else {
-			newChecked.splice(currentIndex, 1);
-		}
-
-		setChecked(newChecked);
-	};
 
 	const options = [{ value: '', label: 'Nenhum' }, ...(controller.schema.type.options?.() ?? [])];
 
@@ -163,33 +147,38 @@ const ToDosListView = () => {
 	const hanldeToDosApi = toDosApi.subscribe('updateCategoria');
 
 	const handleCheckboxClick = (task: IToDos) => {
-		if (task._id == undefined) return;
+		if (!task._id) return;
 
-		const handleToDosApi = toDosApi.subscribe('updateCategoria');
+		const isNowCompleted = task.type !== 'Concluída';
 
-		//Meteor.call('toDos.updateCategoria', taskId, 'Concluída', (err) => {
-		// if (err) {
-		// 		console.error('Erro ao atualizar categoriaa:', err.reason);
-		// 	} else {
-		// 		console.log('Categoria atualizada');
-		// 	}
-		// });
-
-		toDosApi.update(
-			{
-				_id: task._id,
-				title: task.title,
-				type: 'Concluída'
-			},
-			(err) => {
-				if (err) {
-					console.error('Erro ao atualizar categora:', err.reason);
-				} else {
-					console.log('Categoria atualizada');
+		if (task.createdby === authContext.user?._id) {
+			toDosApi.update(
+				{
+					_id: task._id,
+					title: task.title,
+					check: true,
+					isPrivate: task.isPrivate,
+					type: isNowCompleted ? 'Concluída' : 'Não concluída'
+				},
+				(err) => {
+					if (err) {
+						console.error('erro', err.reason);
+					} else {
+						console.log('atualizou');
+						setChecked((prevChecked) => {
+							const value = String(task._id);
+							if (isNowCompleted) {
+								return [...prevChecked, value];
+							} else {
+								return prevChecked.filter((id) => id !== value);
+							}
+						});
+					}
 				}
-			}
-		);
-		/** */
+			);
+		} else {
+			alert('Essa tarefa pertence à outro usuário');
+		}
 	};
 
 	return (
@@ -292,7 +281,7 @@ const ToDosListView = () => {
 															handleCheckboxClick(task);
 														}
 													}}
-													onChange={handleToggle(String(task._id))}
+													onChange={() => handleCheckboxClick(task)}
 												/>
 											</ListItemIcon>
 											<KeyboardArrowRightIcon />
@@ -300,18 +289,20 @@ const ToDosListView = () => {
 												id={labelId}
 												//se a tarefa estiver marcada, o texto fica grifado
 												primary={
-													checked.includes(String(task._id)) ? (
-														<Typography sx={{ ...SysFonts.h6(), textDecoration: 'line-through', fontWeight:"bold"}}  color="primary">
+													checked.includes(String(task._id)) || task.type == 'Concluída' ? (
+														<Typography
+															sx={{ ...SysFonts.h6(), textDecoration: 'line-through', fontWeight: 'bold' }}
+															color="primary">
 															{' ' + task.title}
 														</Typography>
 													) : (
-														<Typography sx={{...SysFonts.h6(), fontWeight:"bold"}} fontWeight="bold" color="primary">
+														<Typography sx={{ ...SysFonts.h6(), fontWeight: 'bold' }} fontWeight="bold" color="primary">
 															{' ' + task.title}
 														</Typography>
 													)
 												}
 												secondary={
-													<Typography sx={{ ...SysFonts.body1()}} color="primary">
+													<Typography sx={{ ...SysFonts.body1() }} color="primary">
 														Criada por:{' '}
 														<Typography component="span" sx={SysFonts.link()} color="primary">
 															{searchUsernameById(task.createdby || '')}
@@ -328,7 +319,7 @@ const ToDosListView = () => {
 													if (task.createdby === authContext?.user?._id) {
 														controller.changeToEdit(task._id);
 													} else {
-														// console.log("curr: ", authContext?.user?.username, " - ", "createdby: ", task.createdby)
+														console.log('curr: ', authContext?.user?.username, ' - ', 'createdby: ', task.createdby);
 														//alert('Essa tarefa pertence a outro usuário');
 														sysLayoutContext.showNotification({
 															title: 'Autorização negada.',

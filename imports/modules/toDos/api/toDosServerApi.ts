@@ -64,36 +64,48 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 		// 	}
 		// );
 
+		// 		`Meteor.user()` is deprecated on the server side.
+		// W20250508-10:22:22.661(-3)? (STDERR)     To fetch the current user record on the server,
+		// W20250508-10:22:22.662(-3)? (STDERR)     use `Meteor.userAsync()` instead.
 		this.addPublication('toDosList', async (filter = {}, options = {}) => {
+			//usando Meteor.userAsync() a query funciona
 			const user = await Meteor.userAsync();
 			// console.log('user_id: ', user._id);
 
 			//espera conseguir o user id antes
-			if (!user?._id) {
-				return [];
+			// if (!user?._id) {
+			// 	return [];
+			// }
+			if (user?._id) {
+				//pega só tasks publicas ou taks privadas mas do usuario logado
+				const query = {
+					$or: [{ isPrivate: false }, { createdby: user._id }],
+					...filter
+				};
+
+				return toDosServerApi.getCollectionInstance().find(query, {
+					...options,
+					sort: { createdat: -1 }
+				});
 			}
-			const query = {
-				$or: [{ isPrivate: false }, { createdby: user._id }],
-				...filter
-			};
-
-			return toDosServerApi.getCollectionInstance().find(query, {
-				...options,
-				sort: { createdat: -1 }
-			});
-
-			// return this.getCollectionInstance().find(
-			// 	{
-			// 		$or: [{ isPrivate: false }, { createdby: user._id }],
-			// 		...filter
-			// 	},
-			// 	{
-			// 		...options,
-			// 		// limit: 6,
-			// 		sort: { createdat: -1 }
-			// 	}
-			// );
 		});
+
+		//NAO FUNCNIONA:
+		// this.addPublication('toDosList', function (filter = {}, options = {}) {
+		// 	const user = await getUserServer(); esse getUserServer atrapalha a query do mongo de alguma forma, talvez pq ele retorna undefined ou pois ele é assincrono ou
+		// por causa do observe() la do serverbase ??
+
+		// 	return self.getCollectionInstance().find(
+		// 		{
+		// 			$or: [{ isPrivate: false }, { createdby: user._id }],
+		// 			...filter
+		// 		},
+		// 		{
+		// 			...options,
+		// 			sort: { createdat: -1 }
+		// 		}
+		// 	);
+		// });
 
 		this.addPublication('toDosDetail', (filter = {}) => {
 			return this.defaultDetailCollectionPublication(filter, {
