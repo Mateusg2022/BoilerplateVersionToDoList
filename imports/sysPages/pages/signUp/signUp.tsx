@@ -66,31 +66,64 @@ export const SignUp = (props: ISignUp) => {
 	return (
 		<>
 			<Container>
-				<Content>
-					<Typography variant="h1" display={'inline-flex'} gap={1}>
-						<Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
-							{/* {'{'} */}
-						</Typography>
-						Criar Conta
-						<Typography variant="inherit" color="sysText.tertiary">
-							{/* {'}'} */}
-						</Typography>
-					</Typography>
+				<Content
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						flexDirection: 'row',
+						gap: '2rem',
+						padding: '2rem 0'
+					}}>
+					<div style={{ flex: 1 }}>
+						<div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+							<Typography variant="h1" display={'inline-flex'} gap={1}>
+								<Typography variant="inherit" color={(theme) => theme.palette.sysText?.tertiary}>
+									{/* {'{'} */}
+								</Typography>
+								Criar Conta
+								<Typography variant="inherit" color="sysText.tertiary">
+									{/* {'}'} */}
+								</Typography>
+							</Typography>
+							<img
+								src="/images/wireframe/fav-icon-192.svg"
+								alt="App Icon"
+								style={{ marginLeft: 8, height: '50px' }}></img>
+						</div>
 
-					<FormContainer>
-						<Typography variant="h5">Cadastre-se no sistema</Typography>
-						<SysForm schema={signUpSchema} onSubmit={handleSubmit} debugAlerts={false}>
-							<FormWrapper>
-								<SysTextField name="nome" label="Nome" fullWidth placeholder="Digite seu nome" />
-								<SysTextField name="email" label="Email" fullWidth placeholder="Digite seu email" />
-								<SysTextField label="Senha" fullWidth name="password" placeholder="Digite sua senha" type="password" />
-								<Box />
-								<SysFormButton variant="contained" color="primary" endIcon={<SysIcon name={'arrowForward'} />}>
-									Cadastrar
-								</SysFormButton>
-							</FormWrapper>
-						</SysForm>
-					</FormContainer>
+						<FormContainer>
+							<Typography variant="h5">Cadastre-se no sistema</Typography>
+							<SysForm schema={signUpSchema} onSubmit={handleSubmit} debugAlerts={false}>
+								<FormWrapper>
+									<SysTextField name="nome" label="Nome" fullWidth placeholder="Digite seu nome" />
+									<SysTextField name="email" label="Email" fullWidth placeholder="Digite seu email" />
+									<SysTextField
+										label="Senha"
+										fullWidth
+										name="password"
+										placeholder="Digite sua senha"
+										type="password"
+									/>
+									<Box />
+									<SysFormButton variant="contained" color="primary" endIcon={<SysIcon name={'arrowForward'} />}>
+										Cadastrar
+									</SysFormButton>
+									<Button variant="outlined" color="primary" onClick={() => navigate('/')}>
+										Login
+									</Button>
+								</FormWrapper>
+							</SysForm>
+						</FormContainer>
+					</div>
+					<div style={{ display: 'flex', justifyContent: 'center' }}>
+						<img
+							// src="/images/wireframe/fav-icon-192.svg"
+							src="/images/wireframe/synergia-logo.svg"
+							alt="App Icon"
+							style={{ maxWidth: '100%', height: '200px', objectFit: 'contain' }}
+						/>
+					</div>
 				</Content>
 			</Container>
 		</>

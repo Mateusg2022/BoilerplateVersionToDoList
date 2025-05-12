@@ -27,10 +27,12 @@ const BoilerplateLogo: React.FC = () => {
 			color={(theme) => theme.palette.sysText?.tertiary}
 			sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 			{/* {'{ '} */}
-			<Typography color={(theme) => theme.palette.primary.contrastText} variant="inherit">
-				ToDo List
-			</Typography>{' '}
-			{/* {'}'} */}
+			<Typography
+				color={(theme) => theme.palette.primary.contrastText}
+				variant="inherit"
+				sx={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+				ToDo List <img src="/images/wireframe/fav-icon-192.svg" style={{ width: '30px', height: '30px' }} />
+			</Typography>
 		</Typography>
 	);
 };
