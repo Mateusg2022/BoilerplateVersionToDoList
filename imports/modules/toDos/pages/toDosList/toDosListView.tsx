@@ -62,14 +62,13 @@ import { IToDos } from '../../api/toDosSch';
 import SysFonts from '../../../../ui/materialui/sysFonts';
 import { Task } from '@mui/icons-material';
 
-const ITEMS_PER_PAGE = 5;
-
 const ToDosListView = () => {
 	const controller = React.useContext(ToDosListControllerContext);
 
 	const detailController = React.useContext(ToDosDetailControllerContext);
 	// const { Container, LoadingContainer, SearchContainer } = ExampleListStyles;
-	const sysLayoutContextt = React.useContext(AppLayoutContext);
+	const appLayoutContext = React.useContext(AppLayoutContext);
+	// const { showNotification } = React.useContext(SysAppLayoutContext);
 	const sysLayoutContext = React.useContext<IAppLayoutContext>(AppLayoutContext);
 	const navigate = useNavigate();
 	const { Container, LoadingContainer, SearchContainer } = ToDosListStyles;
@@ -101,8 +100,17 @@ const ToDosListView = () => {
 	// }
 
 	// const [checked, setChecked] = React.useState<string[]>([]);
+	const ITEMS_PER_PAGE = 5;
+	// const [checked, setChecked] = React.useState<string[]>(controller.todoList.map((task) => String(task._id)));
+	const [checked, setChecked] = React.useState<string[]>(
+		controller.todoList.filter((task) => task.type === 'Concluída').map((task) => String(task._id))
+	);
 
-	const [checked, setChecked] = React.useState<string[]>(controller.todoList.map((task) => String(task._id)));
+	React.useEffect(() => {
+		if (controller.todoList.length) {
+			setChecked(controller.todoList.filter((task) => task.type === 'Concluída').map((task) => String(task._id)));
+		}
+	}, [controller.todoList]);
 
 	const [page, setPage] = useState(1);
 
@@ -177,7 +185,13 @@ const ToDosListView = () => {
 				}
 			);
 		} else {
-			alert('Essa tarefa pertence à outro usuário');
+			// alert('Essa tarefa pertence à outro usuário');
+			appLayoutContext.showNotification({
+				message: 'Essa tarefa pertence à outro usuário',
+				type: 'default',
+				actionButtonTex: 'Fechar',
+				duration: 3000
+			});
 		}
 	};
 
@@ -239,26 +253,14 @@ const ToDosListView = () => {
 			) : (
 				<>
 					<Box sx={{ width: '100%', minHeight: 300 }}>
+						<Typography variant="h6" sx={{ mt: 2 }}>
+							Lista de Tarefas
+						</Typography>
 						<List sx={{ width: '100%', bgcolor: 'background.paper' }}>
 							{paginatedItems.map((task) => {
 								const labelId = `checkbox-list-label-${task.title}`;
 								return (
-									<ListItem
-										//onClick={() => navigate('/toDos/view/' + task._id)}
-										// onClick={() => {
-										// 	setCurrentId(task._id);
-										// 	setIsOpen(true);
-										// }}
-										sx={{ width: '100%' }}
-										key={task._id}
-										disablePadding>
-										{/* <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-											<Box sx={modalStyle}>
-												<ToDosModuleContext.Provider value={moduleState}>
-													<ToDosDetailController />
-												</ToDosModuleContext.Provider>
-											</Box>
-										</Modal> */}
+									<ListItem sx={{ width: '100%' }} key={task._id} disablePadding>
 										<ListItemButton
 											onClick={() => {
 												setCurrentId(task._id);
@@ -369,6 +371,122 @@ const ToDosListView = () => {
 								);
 							})}
 						</List>
+
+						{/* <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+							{paginatedItems.map((task) => {
+								const labelId = `checkbox-list-label-${task.title}`;
+								return (
+									<ListItem sx={{ width: '100%' }} key={task._id} disablePadding>
+										<ListItemButton
+											onClick={() => {
+												setCurrentId(task._id);
+												setIsOpen(true);
+											}}
+											role={undefined}
+											dense
+											// removido handleToggle daqui para evitar marcação ao clicar no corpo
+										>
+											<ListItemIcon>
+												<Checkbox
+													edge="start"
+													checked={checked.includes(String(task._id))}
+													tabIndex={-1}
+													disableRipple
+													inputProps={{ 'aria-labelledby': labelId }}
+													onClick={(e) => {
+														{
+															e.stopPropagation();
+															handleCheckboxClick(task);
+														}
+													}}
+													onChange={() => handleCheckboxClick(task)}
+												/>
+											</ListItemIcon>
+											<KeyboardArrowRightIcon />
+											<ListItemText
+												id={labelId}
+												//se a tarefa estiver marcada, o texto fica grifado
+												primary={
+													checked.includes(String(task._id)) || task.type == 'Concluída' ? (
+														<Typography
+															sx={{ ...SysFonts.h6(), textDecoration: 'line-through', fontWeight: 'bold' }}
+															color="primary">
+															{' ' + task.title}
+														</Typography>
+													) : (
+														<Typography sx={{ ...SysFonts.h6(), fontWeight: 'bold' }} fontWeight="bold" color="primary">
+															{' ' + task.title}
+														</Typography>
+													)
+												}
+												secondary={
+													<Typography sx={{ ...SysFonts.body1() }} color="primary">
+														Criada por:{' '}
+														<Typography component="span" sx={SysFonts.link()} color="primary">
+															{searchUsernameById(task.createdby || '')}
+														</Typography>
+													</Typography>
+												}
+											/>
+										</ListItemButton>
+										<ListItemSecondaryAction sx={{ display: 'flex', gap: 1 }}>
+											<IconButton
+												edge="end"
+												aria-label="edit"
+												onClick={() => {
+													if (task.createdby === authContext?.user?._id) {
+														controller.changeToEdit(task._id);
+													} else {
+														console.log('curr: ', authContext?.user?.username, ' - ', 'createdby: ', task.createdby);
+														//alert('Essa tarefa pertence a outro usuário');
+														sysLayoutContext.showNotification({
+															title: 'Autorização negada.',
+															message: 'Essa tarefa pertence a outro usuário',
+															type: 'default',
+															// showCloseButton: true,
+															actionButtonTex: 'Fechar',
+															duration: 3000
+														});
+													}
+												}}>
+												<EditIcon />
+											</IconButton>
+											<IconButton
+												edge="end"
+												aria-label="delete"
+												onClick={() => {
+													if (task.createdby === authContext?.user?._id) {
+														DeleteDialog({
+															showDialog: sysLayoutContext.showDialog,
+															closeDialog: sysLayoutContext.closeDialog,
+															title: `Excluir dado ${task.title}`,
+															message: `Tem certeza que deseja excluir o arquivo "${task.title}"?`,
+															onDeleteConfirm: () => {
+																controller.onDeleteButtonClick(task);
+																sysLayoutContext.showNotification({
+																	message: 'Excluído com sucesso!'
+																});
+															}
+														});
+													} else {
+														//alert('Essa tarefa pertence a outro usuário');
+														sysLayoutContext.showNotification({
+															title: 'Autorização negada.',
+															message: 'Essa tarefa pertence a outro usuário',
+															type: 'default',
+															// showCloseButton: true,
+															actionButtonTex: 'Fechar',
+															duration: 3000
+														});
+													}
+												}}>
+												<DeleteIcon />
+											</IconButton>
+										</ListItemSecondaryAction>
+									</ListItem>
+								);
+							})}
+						</List> */}
 					</Box>
 
 					{totalPages > 1 && (
