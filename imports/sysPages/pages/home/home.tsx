@@ -53,19 +53,21 @@ import { userprofileApi } from '../../../modules/userprofile/api/userProfileApi'
 
 import CloseIcon from '@mui/icons-material/Close';
 
+import SysFonts from '../../../ui/materialui/sysFonts';
+
 const Home: React.FC = () => {
 	const { Container, Header } = HomeStyles;
 	//const { Container, Header, LoadingContainer, ContainerBody } = HomeStyles;
 
 	const { user } = React.useContext(AuthContext);
 
-	// // const { Container, LoadingContainer, SearchContainer } = ExampleListStyles;
-	// // const sysLayoutContextt = React.useContext(SysAppLayoutContext);
+	// const { Container, LoadingContainer, SearchContainer } = ExampleListStyles;
+	// const sysLayoutContextt = React.useContext(SysAppLayoutContext);
 	const sysLayoutContext = React.useContext<IAppLayoutContext>(AppLayoutContext);
 	const navigate = useNavigate();
 	// const options = [{ value: '', label: 'Nenhum' }, ...(controller.schema.type?.options?.() ?? [])];
 
-	const handleToDosFiveInfo = toDosApi.subscribe('tarefasPublic');
+	// const handleToDosFiveInfo = toDosApi.subscribe('tarefasPublic');
 
 	const fiveRecentTasks = useTracker(() => {
 		const handle = toDosApi.subscribe('tarefasPublic');
@@ -116,6 +118,11 @@ const Home: React.FC = () => {
 		state: 'view' //'create', 'edit'
 	};
 
+	const searchUsernameById = (id: string): string | undefined => {
+		const user = userprofileApi.findOne({ _id: id });
+		return user?.username;
+	};
+
 	return (
 		<Container>
 			<Modal
@@ -146,73 +153,70 @@ const Home: React.FC = () => {
 					</ToDosModuleContext.Provider>
 				</Box>
 			</Modal>
-
 			<Header>
 				<Typography variant="h2">Olá, {user?.username}</Typography>
 				<Typography variant="body1" textAlign={'justify'}>
 					Seus projetos muito mais organizados. Veja as tarefas adicionadas por seu time, por você e para você.
 				</Typography>
 			</Header>
-
 			<div>
 				<Typography variant="h3">Atividades recentes</Typography>
 				{/* <Typography variant="body1" textAlign={'justify'}>
 					Tarefas recentes
 				</Typography> */}
 			</div>
-			<List sx={{ width: '100%', /*maxWidth: 360,*/ bgcolor: 'background.paper' }}>
-				{toDosApi
-					.find({})
-					.fetch()
-					.map((task) => {
-						const labelId = `checkbox-list-label-${task.title}`;
 
-						return (
-							<ListItem
-								key={task._id}
-								onClick={() => {
-									setCurrentId(task._id);
-									setIsOpen(true);
-								}}
-								secondaryAction={
-									<>
-										<IconButton>
-											<EditIcon />
-										</IconButton>
-										<IconButton>
-											<DeleteIcon />
-										</IconButton>
-									</>
-									// <IconButton>
-									// 		<DeleteIcon/>
-
-									// </IconButton>
-								}
-								disablePadding>
-								<ListItemButton role={undefined} onClick={handleToggle(task._id)} dense>
-									<ListItemIcon>
-										<Checkbox
-											edge="start"
-											checked={checked.includes(task._id)}
-											tabIndex={-1}
-											disableRipple
-											inputProps={{ 'aria-labelledby': labelId }}
-										/>
-									</ListItemIcon>
-									<KeyboardArrowRightIcon />
-									<ListItemText
-										id={labelId}
-										primary={
-											<Typography variant="h6" fontWeight="bold" color="primary">
-												{' ' + task.title}
-											</Typography>
-										}
-									/>
-								</ListItemButton>
-							</ListItem>
-						);
-					})}
-			</List>
+			<>
+				<Box sx={{ width: '100%', minHeight: 300 }}>
+					<List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+						{toDosApi
+							.find({})
+							.fetch()
+							.map((task) => {
+								const labelId = `checkbox-list-label-${task.title}`;
+								return (
+									<ListItem sx={{ width: '100%' }} key={task._id} disablePadding>
+										<ListItemButton
+											onClick={() => {
+												setCurrentId(task._id);
+												setIsOpen(true);
+											}}
+											role={undefined}
+											dense>
+											<KeyboardArrowRightIcon />
+											<ListItemText
+												id={labelId}
+												//se a tarefa estiver marcada, o texto fica grifado
+												primary={
+													checked.includes(String(task._id)) || task.type == 'Concluída' ? (
+														<Typography
+															sx={{ ...SysFonts.h6(), textDecoration: 'line-through', fontWeight: 'bold' }}
+															color="primary">
+															{' ' + task.title}
+														</Typography>
+													) : (
+														<Typography sx={{ ...SysFonts.h6(), fontWeight: 'bold' }} fontWeight="bold" color="primary">
+															{' ' + task.title}
+														</Typography>
+													)
+												}
+												secondary={
+													<Typography sx={{ ...SysFonts.body1() }} color="primary">
+														Criada por:{' '}
+														<Typography component="span" sx={SysFonts.link()} color="primary">
+															{searchUsernameById(task.createdby || '')}
+														</Typography>
+													</Typography>
+												}
+											/>
+										</ListItemButton>
+									</ListItem>
+								);
+							})}
+					</List>
+				</Box>
+			</>
+			{/** */}
 			<Button variant="contained" onClick={() => navigate('/toDos')}>
 				Minhas Tarefas
 			</Button>
