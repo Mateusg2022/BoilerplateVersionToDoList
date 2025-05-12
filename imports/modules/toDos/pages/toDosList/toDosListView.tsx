@@ -136,9 +136,11 @@ const ToDosListView = () => {
 		transform: 'translate(-50%, -50%)',
 		width: '90%',
 		maxWidth: 600,
+		maxHeight: '90vh',
 		bgcolor: 'background.paper',
 		boxShadow: 24,
 		p: 4,
+		overflowY: 'auto',
 		borderRadius: 2
 	};
 
