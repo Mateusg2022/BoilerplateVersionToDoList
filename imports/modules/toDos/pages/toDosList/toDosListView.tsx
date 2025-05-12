@@ -116,9 +116,11 @@ const ToDosListView = () => {
 
 	const options = [{ value: '', label: 'Nenhum' }, ...(controller.schema.type.options?.() ?? [])];
 
-	const sortedList = (Array.isArray(controller.todoList) ? [...controller.todoList] : []).sort(
-		(a, b) => (b.createdat || 0) - (a.createdat || 0)
-	);
+	// const sortedList = (Array.isArray(controller.todoList) ? [...controller.todoList] : []).sort(
+	// 	(a, b) => (b.createdat || 0) - (a.createdat || 0)
+	// );
+
+	const sortedList = toDosApi.find({}, { sort: { createdat: -1 } }).fetch();
 
 	const totalPages = Math.ceil(sortedList.length / ITEMS_PER_PAGE);
 	const startIndex = (page - 1) * ITEMS_PER_PAGE;
