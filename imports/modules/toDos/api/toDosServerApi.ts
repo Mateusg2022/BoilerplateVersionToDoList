@@ -167,13 +167,15 @@ class ToDosServerApi extends ProductServerBase<IToDos> {
 		);
 
 		//intuito: acessar as 5 tarefas alteradas mais recentes na Home, fora do contexto do modulo toDos
-		this.addPublication('tarefasPublic', (filter = {}) => {
-			return this.defaultCollectionPublication(filter, { sort: { createdat: -1 }, limit: 5 });
+		this.addPublication('tarefasPublic', async function (filter = {}) {
+			const user = await getUserServer();
+			// console.log('user', user);
+			let filtro = {
+				...filter,
+				$or: [{ isPrivate: false }, { createdby: user?._id }]
+			};
 
-			// return this.getCollectionInstance().find(filter, {
-			// 	limit: 5,
-			// 	sort: { createdat: -1 }
-			// });
+			return self.defaultCollectionPublication(filtro, { sort: { createdat: -1 }, limit: 5 });
 		});
 
 		//intuito: atalizar a categoria de uma task, pro ícone de check
