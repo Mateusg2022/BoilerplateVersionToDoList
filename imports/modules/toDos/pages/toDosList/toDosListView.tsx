@@ -228,7 +228,7 @@ const ToDosListView = () => {
 			</Modal>
 
 			<Typography variant="h4">ToDos</Typography>
-			<Typography variant="h5">Lista de Itens</Typography>
+			{/* <Typography variant="h5">Lista de Itens</Typography> */}
 			<SearchContainer>
 				<SysTextField
 					name="search"
